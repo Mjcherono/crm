@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.forms import inlineformset_factory #creates multiple forms within one form
 # create your views here
 from .models import Order, Customer, Product
 from .templates.accounts.forms import OrderForm
@@ -35,18 +36,23 @@ def customer(request, pk):
     context = {"customer":customer, "orders":orders, "order_count":order_count}
     return render(request, 'accounts/customers.html', context)
 
-
-def createOrder(request):
-    form = OrderForm()
-    if request.method == "POST":
+#The below will use formsets to handle multiple instances of the Order model associated with customer
+#Formsets simplify the process of managing and processing multiple forms on a single page, allowing the user to create multiple orders for a customer in a single submission
+def createOrder(request, pk):
+    OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10)
+    customer = Customer.objects.get(id=pk)
+    formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
+    # form = OrderForm(initial={'customer':customer})
+    if request.method == 'POST':
         # print("Printing POST:", request.POST)
-        form = OrderForm(request.POST)
+        # form = OrderForm(request.POST)
+        formset = OrderFormSet(request.POST, instance=customer)
         # save to db
-        if form.is_valid():
-            form.save()
+        if formset.is_valid():
+            formset.save()
             return redirect('/')
 
-    context = {'form':form}
+    context = {'formset':formset}
     return render(request, 'accounts/order_form.html', context)
 
 # sends post data into the form and redirects you to dashboard
