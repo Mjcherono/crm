@@ -4,6 +4,7 @@ from django.forms import inlineformset_factory #creates multiple forms within on
 # create your views here
 from .models import Order, Customer, Product
 from .templates.accounts.forms import OrderForm
+from .filters import OrderFilter
 
 
 # Create your views here.
@@ -33,7 +34,10 @@ def customer(request, pk):
     orders = customer.order_set.all()
     order_count = orders.count()
 
-    context = {"customer":customer, "orders":orders, "order_count":order_count}
+    myFilter = OrderFilter(request.GET, queryset=orders)
+    orders = myFilter.qs
+
+    context = {"customer":customer, "orders":orders, "order_count":order_count, 'myFilter':myFilter}
     return render(request, 'accounts/customers.html', context)
 
 #The below will use formsets to handle multiple instances of the Order model associated with customer
