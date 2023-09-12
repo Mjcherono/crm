@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 # Create your views here.
-from .models import Order, Customer, Product
+from .models import *
 from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
@@ -23,22 +23,15 @@ from .decorators import unauthenticated_user, allowed_users, admin_only
 def registerPage(request):
 
     form = CreateUserForm()
-        
     #when you save it creates user. The below hashes passwords for us
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get("username")
 
-            group = Group.objects.get(name='customer')
-            user.groups.add(group)
-            # the below creates a customer & matches to a user
-            Customer.objects.create(
-                user = user,
-            )
-
             messages.success(request, "Account was created for " + username)
+            
             return redirect('login')
 
     context = {'form':form}

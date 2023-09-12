@@ -44,4 +44,7 @@ def admin_only(view_func):
         if group == 'admin':
             return view_func(request, *args, **kwargs)
         
+        # Handle other cases, e.g., if group is not recognized
+        return HttpResponse("You are not authorized to view this page", status=403)  # Return a forbidden response
+    
     return wrapper_function
