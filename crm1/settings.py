@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     
     "django_filters",
 
+    'storages',
+
 
 ]
 
@@ -80,12 +82,50 @@ WSGI_APPLICATION = "crm1.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": 'mila_crm',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        "HOST": 'localhost',
+        "PORT": 5432
     }
 }
+
+# S3 Bucket Config
+# AWS_ACCESS_KEY_ID = ''
+# AWS_SECRET_ACCESS_KEY = ''
+# AWS_STORAGE_BUCKET_NAME = ''
+
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3BotoStorage'
+
+
+
+
+
+# For static files on AWS S3 Bucket to allow communication with our app, paste the below in permissions
+# <?xml-version=”1.0” encoding=”UTF-8”?>
+# <CORSConfiguration xmlns=”http://s3.amazonaws.com/doc/2006-03-01/”>
+# <CORSRule>
+# 	<AllowedOrigin>*</AllowedOrigin>
+# 	<AllowedMethod>GET</AllowedMethod>
+# 	<AllowedMethod>POST</AllowedMethod>
+# 	<AllowedMethod>PUT</AllowedMethod>
+# 	<AllowedHeader>*</AllowedHeader>
+# </CORSRule>
+# </CORSConfiguration>
+
 
 
 # Password validation
@@ -144,4 +184,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mjcheruiyot33@gmail.com'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_PASSWORD = 'Koroga@2019'
